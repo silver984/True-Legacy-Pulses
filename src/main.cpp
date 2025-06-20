@@ -1,5 +1,6 @@
 ﻿#include <Geode/Geode.hpp>
 #include <Geode/modify/FMODAudioEngine.hpp>
+#include <Geode/modify/CCScheduler.hpp>
 
 using namespace geode::prelude;
 
@@ -23,6 +24,14 @@ T getCachedSettingValue(std::string name) {
     }
 }
 
+float globalFPS;
+class $modify(CCScheduler) {
+    void update(float dt) {
+        globalFPS = 1 / dt;
+        CCScheduler::update(dt);
+    }
+};
+
 class $modify(FMODAudioEngine) {
     virtual void update(float delta) {
         bool modToggle = getCachedSettingValue<bool>("actual-toggle");
@@ -34,7 +43,7 @@ class $modify(FMODAudioEngine) {
         if (getCachedSettingValue<bool>("toggle"))
             simFPS = static_cast<float>(getCachedSettingValue<int>("sim-fps"));
         else
-            simFPS = CCDirector::sharedDirector()->m_fFrameRate;
+            simFPS = globalFPS;
 
         float quotient = simFPS / 60;
 
