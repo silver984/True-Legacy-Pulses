@@ -40,7 +40,7 @@ class $modify(FMODAudioEngine) {
 
         bool forceVal = getCachedSettingValue<bool>("toggle");
         float simFPS;
-        if (getCachedSettingValue<bool>("toggle"))
+        if (forceVal)
             simFPS = static_cast<float>(getCachedSettingValue<int>("sim-fps"));
         else
             simFPS = globalFPS;
